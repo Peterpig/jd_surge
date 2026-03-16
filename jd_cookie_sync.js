@@ -474,6 +474,7 @@ async function syncToQinglong(cookie, ptPin) {
         const cookieResult = extractCookie(headers);
 
         if (!cookieResult.valid) {
+            $.log(`❌ cookie 无效 ${cookieResult}`);
             $.done({});
             return;
         }
