@@ -308,6 +308,35 @@ async function addEnv(config, token, name, value, remarks) {
     }
 }
 
+/**
+ * 编辑青龙环境变量
+ */
+async function editEnv(config, token, name, value, remarks, envId) {
+    const data = [{
+        name,
+        value,
+        remarks: remarks || `Added by ${$.getEnv()} at ${new Date().toLocaleString()}`,
+        id: envId
+    }];
+
+    try {
+        const body = await callQinglongApi(config, token, '/open/envs', {
+            method: 'PUT',
+            body: data
+        });
+
+        if (body.code === 200) {
+            return { success: true };
+        }
+
+    } catch (error) {
+        $.log(`❌ 新增环境变量异常: ${error.message || error}`);
+        return { success: false, message: error.message || String(error) };
+    }
+}
+
+
+
 // ============= 环境变量同步逻辑 =============
 
 /**
@@ -349,6 +378,7 @@ async function deleteEnvsExcept(config, token, envs, excludeId) {
     }
 }
 
+
 /**
  * 删除所有环境变量
  */
@@ -362,6 +392,7 @@ async function deleteAllEnvs(config, token, envs) {
     }
     return failed.length === 0;
 }
+
 
 /**
  * 处理已存在的环境变量
@@ -383,8 +414,9 @@ async function handleExistingEnvs(config, token, existingEnvs, cookie, ptPin) {
 
     // 没有值匹配，删除所有旧的并添加新的
     $.log(`🔄 Cookie 已变化，更新中 [${ptPin}]`);
-    await deleteAllEnvs(config, token, existingEnvs);
-    return await addEnv(config, token, 'JD_COOKIE', cookie, `Account: ${ptPin}`);
+    // await deleteAllEnvs(config, token, existingEnvs);
+    // return await addEnv(config, token, 'JD_COOKIE', cookie, `Account: ${ptPin}`);
+    await editEnv(config, token, 'JD_COOKIE', cookie, `Account: ${ptPin}`, getEnvId(exactMatch));
 }
 
 /**
