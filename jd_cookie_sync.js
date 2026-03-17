@@ -419,7 +419,7 @@ async function handleExistingEnvs(config, token, existingEnvs, cookie, ptPin) {
     $.log(`🔄 Cookie 已变化，更新中 [${ptPin}]`);
     // await deleteAllEnvs(config, token, existingEnvs);
     // return await addEnv(config, token, 'JD_COOKIE', cookie, `Account: ${ptPin}`);
-    await editEnv(config, token, 'JD_COOKIE', cookie, `Account: ${ptPin}`, getEnvId(exactMatch[0]));
+    await editEnv(config, token, 'JD_COOKIE', cookie, `Account: ${ptPin}`, getEnvId(existingEnvs[0]));
 }
 
 /**
