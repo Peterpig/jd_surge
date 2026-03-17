@@ -312,6 +312,7 @@ async function addEnv(config, token, name, value, remarks) {
  * 编辑青龙环境变量
  */
 async function editEnv(config, token, name, value, remarks, envId) {
+    $.log(`📝 编辑环境变量 [${name}] (ID=${envId})`);
     const data = [{
         name,
         value,
@@ -399,6 +400,8 @@ async function deleteAllEnvs(config, token, envs) {
  */
 async function handleExistingEnvs(config, token, existingEnvs, cookie, ptPin) {
     const exactMatch = existingEnvs.find(env => env.value === cookie);
+    $.log(`🔍 找到 ${existingEnvs.length} 个匹配的 JD_COOKIE 环境变量 [${ptPin}]`);
+    $.log(`existingEnvs = ${JSON.stringify(existingEnvs)}`);
 
     // 只有一个且值相同，无需操作
     if (exactMatch && existingEnvs.length === 1) {
