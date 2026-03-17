@@ -319,12 +319,15 @@ async function editEnv(config, token, name, value, remarks, envId) {
         remarks: remarks || `Added by ${$.getEnv()} at ${new Date().toLocaleString()}`,
         id: envId
     }];
+    $.log(`📝 data = ${JSON.stringify(data)}`);
 
     try {
         const body = await callQinglongApi(config, token, '/open/envs', {
             method: 'PUT',
             body: data
         });
+
+        $.log(`📝 body = ${JSON.stringify(body)}`);
 
         if (body.code === 200) {
             return { success: true };
