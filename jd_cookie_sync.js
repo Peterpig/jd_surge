@@ -313,13 +313,12 @@ async function addEnv(config, token, name, value, remarks) {
  */
 async function editEnv(config, token, name, value, remarks, envId) {
     $.log(`📝 编辑环境变量 [${name}] (ID=${envId})`);
-    const data = [{
+    const data = {
         name,
         value,
-        remarks: remarks || `Added by ${$.getEnv()} at ${new Date().toLocaleString()}`,
+        remarks: remarks || `Edited by ${$.getEnv()} at ${new Date().toLocaleString()}`,
         id: envId
-    }];
-    $.log(`📝 data = ${JSON.stringify(data)}`);
+    };
 
     try {
         const body = await callQinglongApi(config, token, '/open/envs', {
@@ -327,14 +326,12 @@ async function editEnv(config, token, name, value, remarks, envId) {
             body: data
         });
 
-        $.log(`📝 body = ${JSON.stringify(body)}`);
-
         if (body.code === 200) {
             return { success: true };
         }
 
     } catch (error) {
-        $.log(`❌ 新增环境变量异常: ${error.message || error}`);
+        $.log(`❌ 编辑环境变量异常: ${error.message || error}`);
         return { success: false, message: error.message || String(error) };
     }
 }
@@ -404,7 +401,6 @@ async function deleteAllEnvs(config, token, envs) {
 async function handleExistingEnvs(config, token, existingEnvs, cookie, ptPin) {
     const exactMatch = existingEnvs.find(env => env.value === cookie);
     $.log(`🔍 找到 ${existingEnvs.length} 个匹配的 JD_COOKIE 环境变量 [${ptPin}]`);
-    $.log(`existingEnvs = ${JSON.stringify(existingEnvs)}`);
 
     // 只有一个且值相同，无需操作
     if (exactMatch && existingEnvs.length === 1) {
